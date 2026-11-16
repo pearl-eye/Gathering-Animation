@@ -39,7 +39,7 @@ jobs:
           ./build.ps1 -DalamudPath $env:DALAMUD_HOME -Repository $env:GITHUB_REPOSITORY -ReleaseTag $env:REQUESTED_TAG
       - uses: actions/upload-artifact@v4
         with:
-          name: GatheringAnimation
+          name: Gathering Animation
           if-no-files-found: error
           path: |
             artifacts/latest.zip

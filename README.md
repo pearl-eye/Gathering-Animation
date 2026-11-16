@@ -1,4 +1,4 @@
-# Gather animation
+# Gathering Animation
 
 ## 简介
 
@@ -16,14 +16,16 @@ pearleye 自制的 FF14 国服采集动画插件，当前版本为 **1.3.1.0**�
 https://raw.githubusercontent.com/pearl-eye/Dalamud-Plugins-CN/main/repo.json
 ```
 
-保存后打开插件安装器，搜索 **Gather animation** 并安装。若已启用本地开发副本，请先禁用该副本，避免重复加载同一插件。插件显示名、内部名称和程序集名均为 `Gather animation`。
+保存后打开插件安装器，搜索 **Gathering Animation** 并安装。若已启用本地开发副本，请先禁用该副本，避免重复加载同一插件。插件显示名为 `Gathering Animation`；为兼容现有配置，内部名称、程序集名和安装文件名仍使用 `Gather animation`。
+
+已安装旧显示名版本时，需重新安装一次，现有设置继续沿用。
 
 - `/gatheranim`：打开设置。
 - `/gatheranim on`：启用总开关。
 - `/gatheranim off`：关闭总开关。
 - `/gatheranim status`：查看当前开关及暂停状态。
 
-设置会自动保存。也可从 [Releases](https://github.com/pearl-eye/GatheringAnimation/releases/latest) 下载安装包。
+设置会自动保存。也可从 [Releases](https://github.com/pearl-eye/Gathering-Animation/releases/latest) 下载安装包。
 
 从源码构建需要 .NET 10 SDK、PowerShell 7.2 及当前国服 Dalamud API 15 的程序集目录：
 
@@ -35,7 +37,7 @@ https://raw.githubusercontent.com/pearl-eye/Dalamud-Plugins-CN/main/repo.json
 
 ## 反馈与贡献
 
-请在 [Issues](https://github.com/pearl-eye/GatheringAnimation/issues) 反馈问题，提供插件版本、游戏版本、涉及职业及复现步骤。提交日志前请移除角色名等个人信息。代码修改建议可通过 Issue 或 Pull Request 提交。
+请在 [Issues](https://github.com/pearl-eye/Gathering-Animation/issues) 反馈问题，提供插件版本、游戏版本、涉及职业及复现步骤。提交日志前请移除角色名等个人信息。代码修改建议可通过 Issue 或 Pull Request 提交。
 
 ## 许可证与归属
 

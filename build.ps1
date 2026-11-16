@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$DalamudPath,
     [string]$DotNet = 'dotnet',
     [ValidatePattern('^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$')]
-    [string]$Repository = 'pearl-eye/GatheringAnimation',
+    [string]$Repository = 'pearl-eye/Gathering-Animation',
     [string]$ReleaseTag = ''
 )
 
@@ -27,7 +27,7 @@ $outputDirectory = Join-Path $PSScriptRoot 'artifacts/plugin'
 & $DotNet build (Join-Path $PSScriptRoot 'Gather animation.csproj') -c Release `
     "-p:DalamudLibPath=$libraryPath" --output $outputDirectory --nologo
 if ($LASTEXITCODE -ne 0) {
-    throw 'Gather animation build failed.'
+    throw 'Gathering Animation build failed.'
 }
 & (Join-Path $PSScriptRoot 'scripts/Package.ps1') -InputDirectory $outputDirectory `
     -Repository $Repository -ReleaseTag $ReleaseTag

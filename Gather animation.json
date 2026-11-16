@@ -1,12 +1,12 @@
 {
   "Author": "pearleye",
-  "Name": "Gather animation",
+  "Name": "Gathering Animation",
   "InternalName": "Gather animation",
   "AssemblyVersion": "1.3.1.0",
   "Description": "采矿工、园艺工和捕鱼人采集无后摇，支持独立开关、站立与坐姿钓鱼，以及附近存在其他玩家时自动暂停。使用 /gatheranim 打开设置。",
   "Punchline": "缩短采矿、园艺和钓鱼动画等待时间",
   "ApplicableVersion": "2026.11.03.0000.0000",
-  "RepoUrl": "https://github.com/pearl-eye/GatheringAnimation",
+  "RepoUrl": "https://github.com/pearl-eye/Gathering-Animation",
   "DalamudApiLevel": 15,
   "Tags": ["gathering", "fishing", "采集", "钓鱼"]
 }

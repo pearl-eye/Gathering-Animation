@@ -3,7 +3,7 @@
 param(
     [string]$InputDirectory = '',
     [ValidatePattern('^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$')]
-    [string]$Repository = 'pearl-eye/GatheringAnimation',
+    [string]$Repository = 'pearl-eye/Gathering-Animation',
     [string]$ReleaseTag = ''
 )
 
@@ -11,14 +11,17 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $pluginName = 'Gather animation'
+$displayName = 'Gathering Animation'
 if ([string]::IsNullOrWhiteSpace($InputDirectory)) {
     $InputDirectory = Join-Path $repoRoot 'artifacts/plugin'
 }
 $InputDirectory = (Resolve-Path -LiteralPath $InputDirectory).Path
 $manifest = Get-Content -LiteralPath (Join-Path $InputDirectory "$pluginName.json") -Raw | ConvertFrom-Json -AsHashtable
 $sourceManifest = Get-Content -LiteralPath (Join-Path $repoRoot "$pluginName.json") -Raw | ConvertFrom-Json -AsHashtable
-if ($manifest['InternalName'] -cne $pluginName -or $manifest['Name'] -cne $pluginName -or $manifest['DalamudApiLevel'] -ne 15) {
-    throw 'The existing plugin identity and Dalamud API 15 must be preserved.'
+if ($manifest['InternalName'] -cne $pluginName -or $manifest['Name'] -cne $displayName -or
+    $sourceManifest['InternalName'] -cne $pluginName -or $sourceManifest['Name'] -cne $displayName -or
+    $manifest['DalamudApiLevel'] -ne 15) {
+    throw 'Expected display name Gathering Animation, compatible internal name Gather animation, and Dalamud API 15.'
 }
 foreach ($field in @('WorkingPluginId', 'InstalledFromUrl', 'Disabled', 'Testing', 'ScheduledForDeletion', 'IsThirdParty')) {
     if ($manifest.Contains($field)) {
@@ -48,6 +51,9 @@ $fileVersion = [Diagnostics.FileVersionInfo]::GetVersionInfo($assemblyPath)
 if ($assembly.Name -cne $pluginName -or $assembly.Version.ToString() -cne $version -or
     $fileVersion.FileVersion -cne $version -or $fileVersion.ProductVersion -cne $version) {
     throw 'DLL assembly, file and product versions must match the manifest.'
+}
+if ($fileVersion.ProductName -cne $displayName -or $fileVersion.FileDescription -cne $displayName) {
+    throw 'DLL product and title must use the display name Gathering Animation.'
 }
 $stream = [IO.File]::OpenRead($assemblyPath)
 $pe = [Reflection.PortableExecutable.PEReader]::new($stream)
@@ -80,7 +86,9 @@ if ($null -eq $runtime -or $runtime.Count -ne 1 -or -not $runtime.Contains("$plu
 }
 $expectedTag = "v$version"
 if ([string]::IsNullOrWhiteSpace($ReleaseTag)) { $ReleaseTag = $expectedTag }
-if ($ReleaseTag -cne $expectedTag) { throw "Expected release tag: $expectedTag" }
+if ($ReleaseTag -cnotin @($expectedTag, "$expectedTag-rename")) {
+    throw "Expected release tag: $expectedTag or $expectedTag-rename"
+}
 
 $files = @("$pluginName.dll", "$pluginName.json", "$pluginName.deps.json")
 $artifacts = Join-Path $repoRoot 'artifacts'
@@ -134,5 +142,5 @@ $lines = foreach ($name in @('latest.zip', 'repo.json')) {
     '{0}  {1}' -f (Get-FileHash -LiteralPath (Join-Path $artifacts $name) -Algorithm SHA256).Hash.ToLowerInvariant(), $name
 }
 [IO.File]::WriteAllText($checksumPath, ($lines -join "`n") + "`n", $utf8)
-Write-Host "Validated $pluginName $version; packaged three files without host assemblies."
+Write-Host "Validated $displayName $version (internal name: $pluginName); packaged three files without host assemblies."
 [pscustomobject]@{ Version = $version; ReleaseTag = $ReleaseTag; ZipPath = $zipPath; RepositoryPath = $repoPath; ChecksumPath = $checksumPath }

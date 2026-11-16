@@ -110,13 +110,13 @@ public sealed class Plugin : IDalamudPlugin
                 PrintStatus();
                 break;
             default:
-                chat.Print("[Gather animation] 使用 /gatheranim、/gatheranim on、/gatheranim off 或 /gatheranim status。");
+                chat.Print("[Gathering Animation] 使用 /gatheranim、/gatheranim on、/gatheranim off 或 /gatheranim status。");
                 break;
         }
     }
 
     private string ActivityStatus => !Enabled ? "已关闭" : PausedForNearbyPlayers ? "附近存在其他玩家，已暂停" : InterceptEnabled ? "正在替换采集动画" : "当前未替换采集动画";
-    private void PrintStatus() => chat.Print($"[Gather animation] 总开关：{State(Enabled)}；采矿工：{State(MiningEnabled)}；园艺工：{State(BotanyEnabled)}；捕鱼人：{State(FishingEnabled)}。附近玩家检测：{State(DisableWhenPlayersAround)}，范围 {PlayerDetectionRange:F1} 米，范围内 {NearbyPlayerCount} 人。状态：{ActivityStatus}。");
+    private void PrintStatus() => chat.Print($"[Gathering Animation] 总开关：{State(Enabled)}；采矿工：{State(MiningEnabled)}；园艺工：{State(BotanyEnabled)}；捕鱼人：{State(FishingEnabled)}。附近玩家检测：{State(DisableWhenPlayersAround)}，范围 {PlayerDetectionRange:F1} 米，范围内 {NearbyPlayerCount} 人。状态：{ActivityStatus}。");
     private static string State(bool enabled) => enabled ? "已启用" : "已关闭";
     private void OpenSettings() => settings.IsOpen = true;
 
@@ -131,7 +131,7 @@ public sealed class Plugin : IDalamudPlugin
         animationHook.Dispose();
     }
 
-    private sealed class SettingsWindow(Plugin plugin) : Window("Gather animation###GatherAnimationSettings")
+    private sealed class SettingsWindow(Plugin plugin) : Window("Gathering Animation###GatherAnimationSettings")
     {
         public override void Draw()
         {
