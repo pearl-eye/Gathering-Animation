@@ -1,0 +1,47 @@
+name: Build and validate package
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.100
+      - name: Download the fixed CN Dalamud API 15 distribution
+        shell: pwsh
+        run: |
+          $archive = Join-Path $env:RUNNER_TEMP 'dalamud.7z'
+          $output = Join-Path $env:RUNNER_TEMP 'dalamud'
+          Invoke-WebRequest -Uri 'https://dalamud-dis.atmoomen.top/26-11-13-01/latest.7z' -OutFile $archive
+          & 7z x $archive "-o$output" -y | Out-Null
+          if ($LASTEXITCODE -ne 0) { throw 'Unable to extract the Dalamud distribution.' }
+          $candidates = @(Get-ChildItem -LiteralPath $output -Filter 'Dalamud.dll' -Recurse -File)
+          if ($candidates.Count -ne 1) { throw 'Expected one Dalamud.dll in the distribution.' }
+          "DALAMUD_HOME=$($candidates[0].DirectoryName)" >> $env:GITHUB_ENV
+      - name: Build and validate the three-file package
+        shell: pwsh
+        env:
+          REQUESTED_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || '' }}
+        run: |
+          ./build.ps1 -DalamudPath $env:DALAMUD_HOME -Repository $env:GITHUB_REPOSITORY -ReleaseTag $env:REQUESTED_TAG
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GatheringAnimation
+          if-no-files-found: error
+          path: |
+            artifacts/latest.zip
+            artifacts/repo.json
+            artifacts/SHA256SUMS

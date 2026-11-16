@@ -1,0 +1,17 @@
+.work/
+.tools/
+bin/
+obj/
+plugin/
+artifacts/
+validation/
+VALIDATION.md
+*.log
+*.jsonl
+*.pdb
+.env
+.env.*
+credentials.json
+configuration.json
+*.pem
+*.key
